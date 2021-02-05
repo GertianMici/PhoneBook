@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Serialization;
 
 namespace PhoneBook.Models.Models
 {
@@ -14,6 +15,7 @@ namespace PhoneBook.Models.Models
         public string  FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        [XmlIgnore]
         public virtual IEnumerable<UserPhones> UserPhones { get; set; }
     }
 }

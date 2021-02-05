@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace PhoneBook.Models.Models
 {
@@ -10,6 +11,7 @@ namespace PhoneBook.Models.Models
         }
         public int Id { get; set; }
         public string Name { get; set; }
+        [XmlIgnore]
         public virtual IEnumerable<UserPhones> UserPhones { get; set; }
     }
 }
