@@ -63,12 +63,15 @@ namespace PhoneBook.API.Controllers
             return result;
         }
         [HttpPost("AddPhoneNumber")]
-        public GetPhoneBook AddPhoneNumber([FromBody] PhoneBookVM phoneBook, int fileType = 0)
+        public ActionResult<GetPhoneBook> AddPhoneNumber([FromBody] PhoneBookVM phoneBook, int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
             var result = _phoneBookRepository.AddPhoneNumber(phoneBook, fileType);
-
+            if (result == null)
+            {
+                return new BadRequestObjectResult("Check user data");
+            }
             return result;
         }
 

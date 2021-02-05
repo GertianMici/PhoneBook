@@ -27,7 +27,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_phoneTypesFile))
             {
-                var phoneType = File.ReadAllText(_phoneTypesFile);
+                var phoneType = File.ReadAllTextAsync(_phoneTypesFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<PhoneTypes>();
                 List<PhoneTypes> phoneTypesList = JsonSerializer.Deserialize<List<PhoneTypes>>(phoneType);
                 return phoneTypesList;
             }
@@ -37,7 +39,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_phoneTypesFile))
             {
-                var phoneType = File.ReadAllText(_phoneTypesFile);
+                var phoneType = File.ReadAllTextAsync(_phoneTypesFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<PhoneTypesVM>();
                 List<PhoneTypesVM> phoneTypesList = JsonSerializer.Deserialize<List<PhoneTypesVM>>(phoneType);
                 return phoneTypesList;
             }
@@ -47,7 +51,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userFile))
             {
-                var userjson = File.ReadAllText(_userFile);
+                var userjson = File.ReadAllTextAsync(_userFile).Result;
+                if (string.IsNullOrEmpty(userjson))
+                    return null;
                 User user = JsonSerializer.Deserialize<List<User>>(userjson).FirstOrDefault(x => x.Id == id);
                 return user;
             }
@@ -57,7 +63,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userPhonesFile))
             {
-                var userPhone = File.ReadAllText(_userPhonesFile);
+                var userPhone = File.ReadAllTextAsync(_userPhonesFile).Result;
+                if (string.IsNullOrEmpty(userPhone))
+                    return new List<UserPhones>();
                 List<UserPhones> userPhones = JsonSerializer.Deserialize<List<UserPhones>>(userPhone);
                 return userPhones;
             }
@@ -67,7 +75,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userPhonesFile))
             {
-                var userPhone = File.ReadAllText(_userPhonesFile);
+                var userPhone = File.ReadAllTextAsync(_userPhonesFile).Result;
+                if (string.IsNullOrEmpty(userPhone))
+                    return new List<UserPhones>();
                 List<UserPhones> userPhones = JsonSerializer.Deserialize<List<UserPhones>>(userPhone).Where(x => x.UserId == id).ToList();
                 return userPhones;
             }
@@ -78,9 +88,11 @@ namespace PhoneBook.Core.FileHandlers
             if (File.Exists(_userFile))
             {
 
-            var user = File.ReadAllText(_userFile);
-            List<User> userList = JsonSerializer.Deserialize<List<User>>(user);
-            return userList;
+                var user = File.ReadAllTextAsync(_userFile).Result;
+                if (string.IsNullOrEmpty(user))
+                    return new List<User>();
+                List<User> userList = JsonSerializer.Deserialize<List<User>>(user);
+                return userList;
             }
             return new List<User>();
         }
@@ -88,23 +100,23 @@ namespace PhoneBook.Core.FileHandlers
         {
             string newUser = JsonSerializer.Serialize(userList);
             if (!File.Exists(_userFile))
-                File.OpenWrite(_userFile);
-            File.WriteAllTextAsync(_userFile, newUser);
+                File.Create(_userFile);
+            File.WriteAllTextAsync(_userFile, newUser).Wait();
         }
         public void WriteUserPhones(List<UserPhones> userPhones)
         {
-            if (!File.Exists(_userPhonesFile))
-                File.OpenWrite(_userPhonesFile);
             var newUserPhones = JsonSerializer.Serialize(userPhones);
-            File.WriteAllTextAsync(newUserPhones, _userPhonesFile);
+            if (!File.Exists(_userPhonesFile))
+                File.Create(_userPhonesFile);
+            File.WriteAllTextAsync(_userPhonesFile,newUserPhones).Wait();
         }
 
         public void WritePhoneTypesVM(List<PhoneTypesVM> vm)
         {
-            if (!File.Exists(_phoneTypesFile))
-                File.OpenWrite(_phoneTypesFile);
             string newnphonetype = JsonSerializer.Serialize(vm);
-            File.WriteAllTextAsync(_phoneTypesFile, newnphonetype);
+            if (!File.Exists(_phoneTypesFile))
+                File.Create(_phoneTypesFile);
+            File.WriteAllTextAsync(_phoneTypesFile, newnphonetype).Wait();
         }
     }
 }

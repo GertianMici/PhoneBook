@@ -29,7 +29,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_phoneTypesFile))
             {
-                var phoneType = File.ReadAllText(_phoneTypesFile);
+                var phoneType = File.ReadAllTextAsync(_phoneTypesFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<PhoneTypes>();
                 List<PhoneTypes> emp;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypes>));
                 using (StringReader textReader = new StringReader(phoneType))
@@ -45,7 +47,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_phoneTypesFile))
             {
-                var phoneType = File.ReadAllText(_phoneTypesFile);
+                var phoneType = File.ReadAllTextAsync(_phoneTypesFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<PhoneTypesVM>();
                 List<PhoneTypesVM> emp;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypesVM>));
                 using (StringReader textReader = new StringReader(phoneType))
@@ -61,7 +65,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userFile))
             {
-                var phoneType = File.ReadAllText(_userFile);
+                var phoneType = File.ReadAllTextAsync(_userFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return null;
                 List<User> emp;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
                 using (StringReader textReader = new StringReader(phoneType))
@@ -77,7 +83,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userPhonesFile))
             {
-                var phoneType = File.ReadAllText(_userPhonesFile);
+                var phoneType = File.ReadAllTextAsync(_userPhonesFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<UserPhones>();
                 List<UserPhones> emp;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
                 using (StringReader textReader = new StringReader(phoneType))
@@ -93,7 +101,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userPhonesFile))
             {
-                var phoneType = File.ReadAllText(_userPhonesFile);
+                var phoneType = File.ReadAllTextAsync(_userPhonesFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<UserPhones>();
                 List<UserPhones> emp;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
                 using (StringReader textReader = new StringReader(phoneType))
@@ -109,7 +119,9 @@ namespace PhoneBook.Core.FileHandlers
         {
             if (File.Exists(_userFile))
             {
-                var phoneType = File.ReadAllText(_userFile);
+                var phoneType = File.ReadAllTextAsync(_userFile).Result;
+                if (string.IsNullOrEmpty(phoneType))
+                    return new List<User>();
                 List<User> emp;
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
                 using (StringReader textReader = new StringReader(phoneType))
@@ -124,37 +136,43 @@ namespace PhoneBook.Core.FileHandlers
         {
             string emp;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
-            using StreamWriter textWriter = new StreamWriter(File.Open(_userFile, FileMode.OpenOrCreate));
-            using (XmlWriter writer = XmlWriter.Create(textWriter))
+            using (StringWriter textWriter = new StringWriter())
             {
-                xmlSerializer.Serialize(writer, userList);
-                emp = textWriter.ToString();
+                using (XmlWriter writer = XmlWriter.Create(textWriter))
+                {
+                    xmlSerializer.Serialize(writer, userList);
+                    emp = textWriter.ToString();
+                }
             }
-            File.WriteAllTextAsync(_userFile, emp);
+            File.WriteAllTextAsync(_userFile, emp).Wait();
         }
         public void WriteUserPhones(List<UserPhones> userPhones)
         {
             string emp;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
-            using StreamWriter textWriter = new StreamWriter(File.Open(_userPhonesFile, FileMode.OpenOrCreate));
-            using (XmlWriter writer = XmlWriter.Create(textWriter))
+            using (StringWriter textWriter = new StringWriter())
             {
-                xmlSerializer.Serialize(writer, userPhones);
-                emp = textWriter.ToString();
+                using (XmlWriter writer = XmlWriter.Create(textWriter))
+                {
+                    xmlSerializer.Serialize(writer, userPhones);
+                    emp = textWriter.ToString();
+                }
             }
-            File.WriteAllTextAsync(_userPhonesFile, emp);
+            File.WriteAllTextAsync(_userPhonesFile, emp).Wait();
         }
         public void WritePhoneTypesVM(List<PhoneTypesVM> vm)
         {
             string emp;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypesVM>));
-            using StreamWriter textWriter = new StreamWriter(File.Open(_phoneTypesFile, FileMode.OpenOrCreate));
-            using (XmlWriter writer = XmlWriter.Create(textWriter))
+            using (StringWriter textWriter = new StringWriter())
             {
-                xmlSerializer.Serialize(writer, vm);
-                emp = textWriter.ToString();
+                using (XmlWriter writer = XmlWriter.Create(textWriter))
+                {
+                    xmlSerializer.Serialize(writer, vm);
+                    emp = textWriter.ToString();
+                }
             }
-            File.WriteAllTextAsync(_phoneTypesFile, emp);
+            File.WriteAllTextAsync(_phoneTypesFile, emp).Wait();
         }
     }
 }
