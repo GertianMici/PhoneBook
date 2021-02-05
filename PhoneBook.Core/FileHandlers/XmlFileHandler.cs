@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
-
+using PhoneBook.Core.Static;
 namespace PhoneBook.Core.FileHandlers
 {
     public class XmlFileHandler : IFileHandler
@@ -27,110 +27,87 @@ namespace PhoneBook.Core.FileHandlers
         }
         public async Task<List<PhoneTypes>> GetPhoneTypes()
         {
-            if (File.Exists(_phoneTypesFile))
+            var phoneType = await StaticFileAccess.ReadFromFile(_phoneTypesFile);
+            if (string.IsNullOrEmpty(phoneType))
+                return new List<PhoneTypes>();
+            List<PhoneTypes> emp;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypes>));
+            using (StringReader textReader = new StringReader(phoneType))
             {
-                var phoneType = File.ReadAllTextAsync(_phoneTypesFile).Result;
-                if (string.IsNullOrEmpty(phoneType))
-                    return new List<PhoneTypes>();
-                List<PhoneTypes> emp;
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypes>));
-                using (StringReader textReader = new StringReader(phoneType))
-                {
-                    emp = (List<PhoneTypes>)xmlSerializer.Deserialize(textReader);
-                }
-                return emp;
+                emp = (List<PhoneTypes>)xmlSerializer.Deserialize(textReader);
             }
-            return new List<PhoneTypes>();
+            return emp;
         }
 
         public async Task<List<PhoneTypesVM>> GetPhoneTypesVM()
         {
-            if (File.Exists(_phoneTypesFile))
+            var phoneType = await StaticFileAccess.ReadFromFile(_phoneTypesFile);
+            if (string.IsNullOrEmpty(phoneType))
+                return new List<PhoneTypesVM>();
+            List<PhoneTypesVM> emp;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypesVM>));
+            using (StringReader textReader = new StringReader(phoneType))
             {
-                var phoneType = File.ReadAllTextAsync(_phoneTypesFile).Result;
-                if (string.IsNullOrEmpty(phoneType))
-                    return new List<PhoneTypesVM>();
-                List<PhoneTypesVM> emp;
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypesVM>));
-                using (StringReader textReader = new StringReader(phoneType))
-                {
-                    emp = (List<PhoneTypesVM>)xmlSerializer.Deserialize(textReader);
-                }
-                return emp;
+                emp = (List<PhoneTypesVM>)xmlSerializer.Deserialize(textReader);
             }
-            return new List<PhoneTypesVM>();
+            return emp;
         }
 
         public async Task<User> GetSpecificUser(int id)
         {
-            if (File.Exists(_userFile))
+            var phoneType = await StaticFileAccess.ReadFromFile(_userFile);
+            if (string.IsNullOrEmpty(phoneType))
+                return null;
+            List<User> emp;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
+            using (StringReader textReader = new StringReader(phoneType))
             {
-                var phoneType = File.ReadAllTextAsync(_userFile).Result;
-                if (string.IsNullOrEmpty(phoneType))
-                    return null;
-                List<User> emp;
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
-                using (StringReader textReader = new StringReader(phoneType))
-                {
-                    emp = (List<User>)xmlSerializer.Deserialize(textReader);
-                }
-                return emp.FirstOrDefault(x => x.Id == id);
+                emp = (List<User>)xmlSerializer.Deserialize(textReader);
             }
-            return null;
+            return emp.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<List<UserPhones>> GetUserPhones()
         {
-            if (File.Exists(_userPhonesFile))
+            var phoneType = await StaticFileAccess.ReadFromFile(_userPhonesFile);
+            if (string.IsNullOrEmpty(phoneType))
+                return new List<UserPhones>();
+            List<UserPhones> emp;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
+            using (StringReader textReader = new StringReader(phoneType))
             {
-                var phoneType = File.ReadAllTextAsync(_userPhonesFile).Result;
-                if (string.IsNullOrEmpty(phoneType))
-                    return new List<UserPhones>();
-                List<UserPhones> emp;
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
-                using (StringReader textReader = new StringReader(phoneType))
-                {
-                    emp = (List<UserPhones>)xmlSerializer.Deserialize(textReader);
-                }
-                return emp;
+                emp = (List<UserPhones>)xmlSerializer.Deserialize(textReader);
             }
-            return new List<UserPhones>();
+            return emp;
+
         }
 
         public async Task<List<UserPhones>> GetUserPhonesForUser(int id)
         {
-            if (File.Exists(_userPhonesFile))
+            var phoneType = await StaticFileAccess.ReadFromFile(_userPhonesFile);
+            if (string.IsNullOrEmpty(phoneType))
+                return new List<UserPhones>();
+            List<UserPhones> emp;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
+            using (StringReader textReader = new StringReader(phoneType))
             {
-                var phoneType = File.ReadAllTextAsync(_userPhonesFile).Result;
-                if (string.IsNullOrEmpty(phoneType))
-                    return new List<UserPhones>();
-                List<UserPhones> emp;
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
-                using (StringReader textReader = new StringReader(phoneType))
-                {
-                    emp = (List<UserPhones>)xmlSerializer.Deserialize(textReader);
-                }
-                return emp.Where(x => x.UserId == id).ToList();
+                emp = (List<UserPhones>)xmlSerializer.Deserialize(textReader);
             }
-            return new List<UserPhones>();
+            return emp.Where(x => x.UserId == id).ToList();
         }
 
         public async Task<List<User>> GetUsers()
         {
-            if (File.Exists(_userFile))
+            var phoneType = await StaticFileAccess.ReadFromFile(_userFile);
+            if (string.IsNullOrEmpty(phoneType))
+                return new List<User>();
+            List<User> emp;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
+            using (StringReader textReader = new StringReader(phoneType))
             {
-                var phoneType = File.ReadAllTextAsync(_userFile).Result;
-                if (string.IsNullOrEmpty(phoneType))
-                    return new List<User>();
-                List<User> emp;
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
-                using (StringReader textReader = new StringReader(phoneType))
-                {
-                    emp = (List<User>)xmlSerializer.Deserialize(textReader);
-                }
-                return emp;
+                emp = (List<User>)xmlSerializer.Deserialize(textReader);
             }
-            return new List<User>();
+            return emp;
         }
         public async Task WriteUsers(List<User> userList)
         {
@@ -144,7 +121,7 @@ namespace PhoneBook.Core.FileHandlers
                     emp = textWriter.ToString();
                 }
             }
-            File.WriteAllTextAsync(_userFile, emp).Wait();
+            await StaticFileAccess.WriteToFile(_userFile, emp);
         }
         public async Task WriteUserPhones(List<UserPhones> userPhones)
         {
@@ -158,7 +135,7 @@ namespace PhoneBook.Core.FileHandlers
                     emp = textWriter.ToString();
                 }
             }
-            File.WriteAllTextAsync(_userPhonesFile, emp).Wait();
+            await StaticFileAccess.WriteToFile(_userPhonesFile, emp);
         }
         public async Task WritePhoneTypesVM(List<PhoneTypesVM> vm)
         {
@@ -172,7 +149,7 @@ namespace PhoneBook.Core.FileHandlers
                     emp = textWriter.ToString();
                 }
             }
-            File.WriteAllTextAsync(_phoneTypesFile, emp).Wait();
+            await StaticFileAccess.WriteToFile(_phoneTypesFile, emp);
         }
     }
 }

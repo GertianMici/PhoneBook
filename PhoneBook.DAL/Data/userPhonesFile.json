@@ -1,1 +1,1 @@
-[]
+[{"Id":1,"PhoneTypeId":0,"UserId":1,"Number":"2131231","User":{"Id":0,"FirstName":null,"LastName":null,"UserPhones":[]},"PhoneType":{"Id":0,"Name":null,"UserPhones":[]}}]

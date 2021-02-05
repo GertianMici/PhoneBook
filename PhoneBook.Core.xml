@@ -146,5 +146,20 @@
             <param name="fileType"></param>
             <returns>true if the user is deleted, false otherwise</returns>
         </member>
+        <member name="M:PhoneBook.Core.Static.StaticFileAccess.ReadFromFile(System.String)">
+            <summary>
+            Reads from a file, by filepath
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Static.StaticFileAccess.WriteToFile(System.String,System.String)">
+            <summary>
+            writes "to write" into a file by filepath
+            </summary>
+            <param name="filepath"></param>
+            <param name="toWrite"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
