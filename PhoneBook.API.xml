@@ -12,7 +12,7 @@
         </member>
         <member name="M:PhoneBook.API.Controllers.PhoneBookController.Get(System.Boolean,System.Boolean,System.Int32)">
             <summary>
-            Get method to get all users
+            method to get all users
             </summary>
             <param name="firstnameOrder"></param>
             <param name="ascOrder"></param>

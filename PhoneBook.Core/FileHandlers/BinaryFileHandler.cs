@@ -24,7 +24,7 @@ namespace PhoneBook.Core.FileHandlers
         }
         public uint FileType => 2;
 
-        public List<PhoneTypes> GetPhoneTypes()
+        public async Task<List<PhoneTypes>> GetPhoneTypes()
         {
             string phoneType;
             if (File.Exists(_phoneTypesFile))
@@ -39,7 +39,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<PhoneTypes>();
         }
 
-        public List<PhoneTypesVM> GetPhoneTypesVM()
+        public async Task<List<PhoneTypesVM>> GetPhoneTypesVM()
         {
             string phoneType;
             if (File.Exists(_phoneTypesFile))
@@ -54,7 +54,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<PhoneTypesVM>();
         }
 
-        public User GetSpecificUser(int id)
+        public async Task<User> GetSpecificUser(int id)
         {
             string userjson;
             if (File.Exists(_userFile))
@@ -69,7 +69,7 @@ namespace PhoneBook.Core.FileHandlers
             return null;
         }
 
-        public List<UserPhones> GetUserPhones()
+        public async Task<List<UserPhones>> GetUserPhones()
         {
             string userPhone;
             if (File.Exists(_userPhonesFile))
@@ -84,7 +84,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<UserPhones>();
         }
 
-        public List<UserPhones> GetUserPhonesForUser(int id)
+        public async Task<List<UserPhones>> GetUserPhonesForUser(int id)
         {
             string userPhone;
             if (File.Exists(_userPhonesFile))
@@ -99,7 +99,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<UserPhones>();
         }
 
-        public List<User> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
             string userjson;
             if (File.Exists(_userFile))
@@ -113,14 +113,14 @@ namespace PhoneBook.Core.FileHandlers
             }
             return new List<User>();
         }
-        public void WriteUsers(List<User> userList)
+        public async Task WriteUsers(List<User> userList)
         {
             string newUser = JsonSerializer.Serialize(userList);
             using BinaryWriter writer = new BinaryWriter(File.Open(_userFile, FileMode.OpenOrCreate));
             writer.Write(newUser);
 
         }
-        public void WriteUserPhones(List<UserPhones> userPhones)
+        public async Task WriteUserPhones(List<UserPhones> userPhones)
         {
             var newUserPhones = JsonSerializer.Serialize(userPhones);
             using BinaryWriter writer = new BinaryWriter(File.Open(_userPhonesFile, FileMode.OpenOrCreate));
@@ -128,7 +128,7 @@ namespace PhoneBook.Core.FileHandlers
 
         }
 
-        public void WritePhoneTypesVM(List<PhoneTypesVM> vm)
+        public async Task WritePhoneTypesVM(List<PhoneTypesVM> vm)
         {
             string phonetypes = JsonSerializer.Serialize(vm);
             using BinaryWriter writer = new BinaryWriter(File.Open(_phoneTypesFile, FileMode.OpenOrCreate));

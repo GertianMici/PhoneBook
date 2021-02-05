@@ -134,7 +134,8 @@
             <summary>
             
             </summary>
-            <param name="user"></param>
+            <param name="vm"></param>
+            <param name="fileType"></param>
             <returns>User where phone was added</returns>
         </member>
         <member name="M:PhoneBook.Core.Repositories.PhoneBookRepository.DeleteUser(System.Int32,System.Int32)">
@@ -142,6 +143,7 @@
             Delete user with given id
             </summary>
             <param name="id"></param>
+            <param name="fileType"></param>
             <returns>true if the user is deleted, false otherwise</returns>
         </member>
     </members>

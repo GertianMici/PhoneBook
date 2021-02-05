@@ -44,19 +44,20 @@ namespace PhoneBook.Core.Repositories
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="vm"></param>
+        /// <param name="fileType"></param>
         /// <returns>User where phone was added</returns>
-        public GetPhoneBook AddPhoneNumber(PhoneBookVM vm, int fileType)
+        public async Task<GetPhoneBook> AddPhoneNumber(PhoneBookVM vm, int fileType)
         {
             try
             {
                 var user = PhoneBookVMToUser(vm);
-                User userGet = FileHandlers[fileType].GetSpecificUser(user.Id);
+                User userGet =await FileHandlers[fileType].GetSpecificUser(user.Id);
                 if (userGet == null)
                 {
                     return null;
                 }
-                List<UserPhones> userPhones = FileHandlers[fileType].GetUserPhones();
+                List<UserPhones> userPhones = await FileHandlers[fileType].GetUserPhones();
                 int userphoneid = userPhones.Count + 1;
                 var userPhonesAdd = user.UserPhones?.AsEnumerable().Select(x => new UserPhones
                 {
@@ -66,8 +67,8 @@ namespace PhoneBook.Core.Repositories
                     UserId = userGet.Id
                 }).ToList();
                 userPhones.AddRange(userPhonesAdd);
-                FileHandlers[fileType].WriteUserPhones(userPhones);
-                return GetUser(user.Id, fileType);
+                await FileHandlers[fileType].WriteUserPhones(userPhones);
+                return await GetUser(user.Id, fileType);
             }
             catch (Exception ex)
             {
@@ -79,19 +80,20 @@ namespace PhoneBook.Core.Repositories
         /// Delete user with given id
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="fileType"></param>
         /// <returns>true if the user is deleted, false otherwise</returns>
-        public bool DeleteUser(int id, int fileType)
+        public async Task<bool> DeleteUser(int id, int fileType)
         {
             try
             {
-                List<UserPhones> userPhones = FileHandlers[fileType].GetUserPhones();
+                List<UserPhones> userPhones =await FileHandlers[fileType].GetUserPhones();
                 userPhones = userPhones.Where(x => x.UserId != id).ToList();
-                FileHandlers[fileType].WriteUserPhones(userPhones);
+                await FileHandlers[fileType].WriteUserPhones(userPhones);
 
 
-                List<User> userList = FileHandlers[fileType].GetUsers();
+                List<User> userList =await FileHandlers[fileType].GetUsers();
                 userList = userList.Where(x => x.Id != id).ToList();
-                FileHandlers[fileType].WriteUsers(userList);
+                await FileHandlers[fileType].WriteUsers(userList);
 
                 return true;
             }
@@ -100,11 +102,11 @@ namespace PhoneBook.Core.Repositories
                 return false;
             }
         }
-        public IEnumerable<PhoneTypesVM> GetPhoneTypes(int fileType)
+        public async Task<IEnumerable<PhoneTypesVM>> GetPhoneTypes(int fileType)
         {
             try
             {              
-                List<PhoneTypesVM> phoneTypesList = FileHandlers[fileType].GetPhoneTypesVM();
+                List<PhoneTypesVM> phoneTypesList =await FileHandlers[fileType].GetPhoneTypesVM();
                 return phoneTypesList;
             }
             catch (Exception)
@@ -114,15 +116,15 @@ namespace PhoneBook.Core.Repositories
             }
         }
 
-        public GetPhoneBook GetUser(int id, int fileType)
+        public async Task<GetPhoneBook> GetUser(int id, int fileType)
         {
             try
             {
-                User user = FileHandlers[fileType].GetSpecificUser(id);
-                List<UserPhones> userPhones = FileHandlers[fileType].GetUserPhonesForUser(id);
-                List<PhoneTypes> phoneTypesList = FileHandlers[fileType].GetPhoneTypes();
-
-
+                User user =await FileHandlers[fileType].GetSpecificUser(id);
+                if (user == null)
+                    return null;
+                List<UserPhones> userPhones =await FileHandlers[fileType].GetUserPhonesForUser(id);
+                List<PhoneTypes> phoneTypesList =await FileHandlers[fileType].GetPhoneTypes();
 
                 userPhones.ForEach(x => x.PhoneType = phoneTypesList.FirstOrDefault(pt => pt.Id == x.PhoneTypeId));
                 user.UserPhones = userPhones;
@@ -130,19 +132,16 @@ namespace PhoneBook.Core.Repositories
             }
             catch (Exception ex)
             {
-
                 return null;
             }
         }
-        private IEnumerable<User> GetAllUsers(int fileType)
+        private async Task<IEnumerable<User>> GetAllUsers(int fileType)
         {
             try
             {
-                List<User> userList = FileHandlers[fileType].GetUsers();
-                List<UserPhones> userPhones = FileHandlers[fileType].GetUserPhones();
-                List<PhoneTypes> phoneTypesList = FileHandlers[fileType].GetPhoneTypes();
-
-
+                List<User> userList =await FileHandlers[fileType].GetUsers();
+                List<UserPhones> userPhones =await FileHandlers[fileType].GetUserPhones();
+                List<PhoneTypes> phoneTypesList =await FileHandlers[fileType].GetPhoneTypes();
 
                 userPhones.ForEach(x => x.PhoneType = phoneTypesList.FirstOrDefault(pt => pt.Id == x.PhoneTypeId));
                 userList.ForEach(x => x.UserPhones = userPhones.Where(up => up.UserId == x.Id));
@@ -155,9 +154,9 @@ namespace PhoneBook.Core.Repositories
             }
         }
 
-        public IEnumerable<GetPhoneBook> GetUsersOrdered(bool firstnameOrder, bool ascOrder, int fileType)
+        public async Task<IEnumerable<GetPhoneBook>> GetUsersOrdered(bool firstnameOrder, bool ascOrder, int fileType)
         {
-            var user = GetAllUsers(fileType);
+            var user =await GetAllUsers(fileType);
             var users = user.Select(x => new GetPhoneBook
             {
                 Id = x.Id,
@@ -196,13 +195,13 @@ namespace PhoneBook.Core.Repositories
             return users;
         }
 
-        public GetPhoneBook PostUser(PhoneBookVM vm, int fileType)
+        public async Task<GetPhoneBook> PostUser(PhoneBookVM vm, int fileType)
         {
             try
             {
                 User user = PhoneBookVMToUser(vm);
 
-                List<User> userList = FileHandlers[fileType].GetUsers();
+                List<User> userList =await FileHandlers[fileType].GetUsers();
 
                 int userId = userList.Count + 1;
                 userList.Add(new User
@@ -212,10 +211,10 @@ namespace PhoneBook.Core.Repositories
                     LastName = user.LastName,
                 });
 
-                FileHandlers[fileType].WriteUsers(userList);
+                await FileHandlers[fileType].WriteUsers(userList);
 
 
-                List<UserPhones> userPhones = FileHandlers[fileType].GetUserPhones();
+                List<UserPhones> userPhones =await FileHandlers[fileType].GetUserPhones();
 
                 int userPhonesId = userPhones.Count + 1;
                 var userPhonesAdd = user.UserPhones?.AsEnumerable().Select(x => new UserPhones
@@ -227,9 +226,9 @@ namespace PhoneBook.Core.Repositories
                 }).ToList();
                 userPhones.AddRange(userPhonesAdd);
 
-                FileHandlers[fileType].WriteUserPhones(userPhones);
+                await FileHandlers[fileType].WriteUserPhones(userPhones);
 
-                return GetUser(userId, fileType);
+                return await GetUser(userId, fileType);
             }
             catch (Exception ex)
             {
@@ -238,12 +237,12 @@ namespace PhoneBook.Core.Repositories
             }
         }
 
-        public GetPhoneBook PutUser(PhoneBookVM vm, int fileType)
+        public async Task<GetPhoneBook> PutUser(PhoneBookVM vm, int fileType)
         {
             try
             {
                 User user = PhoneBookVMToUser(vm);
-                List<User> userList = FileHandlers[fileType].GetUsers();
+                List<User> userList =await FileHandlers[fileType].GetUsers();
 
 
                 userList.Where(x => x.Id == user.Id).ToList().ForEach(upd =>
@@ -254,9 +253,9 @@ namespace PhoneBook.Core.Repositories
                   });
 
 
-                FileHandlers[fileType].WriteUsers(userList);
+                await FileHandlers[fileType].WriteUsers(userList);
 
-                List<UserPhones> userPhones = FileHandlers[fileType].GetUserPhones();
+                List<UserPhones> userPhones =await FileHandlers[fileType].GetUserPhones();
 
                 List<int> userPhonesID = user.UserPhones?.Select(x => x.Id).ToList();
                 userPhones.Where(x => userPhonesID.Contains(x.Id)).ToList().ForEach(x =>
@@ -265,9 +264,9 @@ namespace PhoneBook.Core.Repositories
                      x.PhoneTypeId = user.UserPhones.FirstOrDefault(y => y.Id == x.Id)?.PhoneTypeId ?? 1;
                  });
 
-                FileHandlers[fileType].WriteUserPhones(userPhones);
+                await FileHandlers[fileType].WriteUserPhones(userPhones);
 
-                return GetUser(user.Id, fileType);
+                return await GetUser(user.Id, fileType);
             }
             catch (Exception ex)
             {
@@ -307,18 +306,18 @@ namespace PhoneBook.Core.Repositories
             };
         }
 
-        public bool AddPhoneTypesVM(PostPhoneTypesVM vm, int fileType)
+        public async Task<bool> AddPhoneTypesVM(PostPhoneTypesVM vm, int fileType)
         {
             try
             {
-                List<PhoneTypesVM> phoneTypesList = FileHandlers[fileType].GetPhoneTypesVM();
+                List<PhoneTypesVM> phoneTypesList =await FileHandlers[fileType].GetPhoneTypesVM();
                 int phonetypeid = phoneTypesList.Count + 1;
                 phoneTypesList.Add(new PhoneTypesVM
                 {
                     Id = phonetypeid,
                     Name = vm.Name
                 });
-                FileHandlers[fileType].WritePhoneTypesVM(phoneTypesList);
+                await FileHandlers[fileType].WritePhoneTypesVM(phoneTypesList);
                 return true;
             }
             catch (Exception ex)

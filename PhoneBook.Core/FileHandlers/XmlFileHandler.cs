@@ -25,7 +25,7 @@ namespace PhoneBook.Core.FileHandlers
             _phoneTypesFile = Path.Combine(Constants.DatabasePath, "phoneTypesFile.xml");
             _userPhonesFile = Path.Combine(Constants.DatabasePath, "userPhonesFile.xml");
         }
-        public List<PhoneTypes> GetPhoneTypes()
+        public async Task<List<PhoneTypes>> GetPhoneTypes()
         {
             if (File.Exists(_phoneTypesFile))
             {
@@ -43,7 +43,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<PhoneTypes>();
         }
 
-        public List<PhoneTypesVM> GetPhoneTypesVM()
+        public async Task<List<PhoneTypesVM>> GetPhoneTypesVM()
         {
             if (File.Exists(_phoneTypesFile))
             {
@@ -61,7 +61,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<PhoneTypesVM>();
         }
 
-        public User GetSpecificUser(int id)
+        public async Task<User> GetSpecificUser(int id)
         {
             if (File.Exists(_userFile))
             {
@@ -79,7 +79,7 @@ namespace PhoneBook.Core.FileHandlers
             return null;
         }
 
-        public List<UserPhones> GetUserPhones()
+        public async Task<List<UserPhones>> GetUserPhones()
         {
             if (File.Exists(_userPhonesFile))
             {
@@ -97,7 +97,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<UserPhones>();
         }
 
-        public List<UserPhones> GetUserPhonesForUser(int id)
+        public async Task<List<UserPhones>> GetUserPhonesForUser(int id)
         {
             if (File.Exists(_userPhonesFile))
             {
@@ -115,7 +115,7 @@ namespace PhoneBook.Core.FileHandlers
             return new List<UserPhones>();
         }
 
-        public List<User> GetUsers()
+        public async Task<List<User>> GetUsers()
         {
             if (File.Exists(_userFile))
             {
@@ -132,7 +132,7 @@ namespace PhoneBook.Core.FileHandlers
             }
             return new List<User>();
         }
-        public void WriteUsers(List<User> userList)
+        public async Task WriteUsers(List<User> userList)
         {
             string emp;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<User>));
@@ -146,7 +146,7 @@ namespace PhoneBook.Core.FileHandlers
             }
             File.WriteAllTextAsync(_userFile, emp).Wait();
         }
-        public void WriteUserPhones(List<UserPhones> userPhones)
+        public async Task WriteUserPhones(List<UserPhones> userPhones)
         {
             string emp;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<UserPhones>));
@@ -160,7 +160,7 @@ namespace PhoneBook.Core.FileHandlers
             }
             File.WriteAllTextAsync(_userPhonesFile, emp).Wait();
         }
-        public void WritePhoneTypesVM(List<PhoneTypesVM> vm)
+        public async Task WritePhoneTypesVM(List<PhoneTypesVM> vm)
         {
             string emp;
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<PhoneTypesVM>));

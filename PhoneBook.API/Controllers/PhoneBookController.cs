@@ -31,11 +31,11 @@ namespace PhoneBook.API.Controllers
         /// <returns></returns>
         // GET: api/<PhoneBookController>
         [HttpGet]
-        public IEnumerable<GetPhoneBook> Get(bool firstnameOrder = true, bool ascOrder = false, int fileType = 0)
-        {            
+        public async Task<IEnumerable<GetPhoneBook>> Get(bool firstnameOrder = true, bool ascOrder = false, int fileType = 0)
+        {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.GetUsersOrdered(firstnameOrder, ascOrder, fileType);
+            var result = await _phoneBookRepository.GetUsersOrdered(firstnameOrder, ascOrder, fileType);
             return result;
         }
         /// <summary>
@@ -46,11 +46,11 @@ namespace PhoneBook.API.Controllers
         /// <returns></returns>
         // GET api/<PhoneBookController>/5
         [HttpGet("{id}")]
-        public GetPhoneBook Get(int id, int fileType = 0)
+        public async Task<GetPhoneBook> Get(int id, int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.GetUser(id, fileType);
+            var result = await _phoneBookRepository.GetUser(id, fileType);
             return result;
         }
         // GET api/values
@@ -59,12 +59,12 @@ namespace PhoneBook.API.Controllers
         /// </summary>
         /// <param name="fileType"></param>
         /// <returns></returns>
-        [HttpGet("GetPhoneTypes")]        
-        public IEnumerable<PhoneTypesVM> GetPhoneTypes(int fileType = 0)
+        [HttpGet("GetPhoneTypes")]
+        public async Task<IEnumerable<PhoneTypesVM>> GetPhoneTypes(int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.GetPhoneTypes(fileType);
+            var result = await _phoneBookRepository.GetPhoneTypes(fileType);
             return result;
         }
         // POST api/<PhoneBookController>
@@ -75,11 +75,11 @@ namespace PhoneBook.API.Controllers
         /// <param name="fileType"></param>
         /// <returns></returns>
         [HttpPost]
-        public GetPhoneBook Post([FromBody] PhoneBookVM user, int fileType = 0)
+        public async Task<GetPhoneBook> Post([FromBody] PhoneBookVM user, int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.PostUser(user, fileType);
+            var result = await _phoneBookRepository.PostUser(user, fileType);
             return result;
         }
         /// <summary>
@@ -89,11 +89,11 @@ namespace PhoneBook.API.Controllers
         /// <param name="fileType"></param>
         /// <returns>Check user data error if result is null</returns>
         [HttpPost("AddPhoneNumber")]
-        public ActionResult<GetPhoneBook> AddPhoneNumber([FromBody] PhoneBookVM phoneBook, int fileType = 0)
+        public async Task<ActionResult<GetPhoneBook>> AddPhoneNumber([FromBody] PhoneBookVM phoneBook, int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.AddPhoneNumber(phoneBook, fileType);
+            var result = await _phoneBookRepository.AddPhoneNumber(phoneBook, fileType);
             if (result == null)
             {
                 return new BadRequestObjectResult("Check user data");
@@ -109,7 +109,7 @@ namespace PhoneBook.API.Controllers
         /// <returns></returns>
         // PUT api/<PhoneBookController>/5
         [HttpPut("{id}")]
-        public ActionResult<GetPhoneBook> Put(int id, [FromBody] PhoneBookVM user, int fileType = 0)
+        public async Task<ActionResult<GetPhoneBook>> Put(int id, [FromBody] PhoneBookVM user, int fileType = 0)
         {
             if (id != user.Id)
             {
@@ -117,7 +117,7 @@ namespace PhoneBook.API.Controllers
             }
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.PutUser(user, fileType);
+            var result = await _phoneBookRepository.PutUser(user, fileType);
 
             return result;
         }
@@ -129,11 +129,15 @@ namespace PhoneBook.API.Controllers
         /// <returns></returns>
         // DELETE api/<PhoneBookController>/5
         [HttpDelete("{id}")]
-        public bool Delete(int id, int fileType = 0)
+        public async Task<bool> Delete(int id, int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.DeleteUser(id, fileType);
+            var user = await _phoneBookRepository.GetUser(id, fileType);
+            if (user == null)
+                return false;
+
+            var result = await _phoneBookRepository.DeleteUser(id, fileType);
             return result;
         }
         /// <summary>
@@ -143,11 +147,11 @@ namespace PhoneBook.API.Controllers
         /// <param name="fileType"></param>
         /// <returns></returns>
         [HttpPost("AddPhoneTYPES")]
-        public bool AddPhoneTypesVM([FromBody] PostPhoneTypesVM vm, int fileType = 0)
+        public async Task<bool> AddPhoneTypesVM([FromBody] PostPhoneTypesVM vm, int fileType = 0)
         {
             if (fileType != 1 && fileType != 2 && fileType != 0)
                 fileType = 0;
-            var result = _phoneBookRepository.AddPhoneTypesVM(vm, fileType);
+            var result = await _phoneBookRepository.AddPhoneTypesVM(vm, fileType);
             return result;
         }
     }
