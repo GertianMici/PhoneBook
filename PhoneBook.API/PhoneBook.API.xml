@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhoneBook.API</name>
+    </assembly>
+    <members>
+        <member name="M:PhoneBook.API.Controllers.PhoneBookController.Get(System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Get method to get all users
+            </summary>
+            <param name="firstnameOrder"></param>
+            <param name="ascOrder"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
