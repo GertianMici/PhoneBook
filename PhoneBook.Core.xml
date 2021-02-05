@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhoneBook.Core</name>
+    </assembly>
+    <members>
+        <member name="P:PhoneBook.Core.FileHandlers.IFileHandler.FileType">
+            <summary>
+            Handles file type by number 0-> JSON ,1 -> XML,2 ->Binary
+            If not determined choose first
+            </summary>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.GetSpecificUser(System.Int32)">
+            <summary>
+            Get user by id
+            </summary>
+            <param name="id"></param>
+            <returns>User data</returns>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.GetUserPhonesForUser(System.Int32)">
+            <summary>
+            Gets all numbers for an user by user id
+            </summary>
+            <param name="id"></param>
+            <returns>List of UserPhones(class that contains user numbers</returns>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.GetPhoneTypes">
+            <summary>
+            Gets all phone types ex home, work etc
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.GetPhoneTypesVM">
+            <summary>
+            Gets all phone types ex home, work etc
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.GetUsers">
+            <summary>
+            Gets all users
+            </summary>
+            <returns>List of users</returns>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.GetUserPhones">
+            <summary>
+            Gets all numbers that are in the phonebook
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.WriteUsers(System.Collections.Generic.List{PhoneBook.Models.Models.User})">
+            <summary>
+            writes users to userFile
+            </summary>
+            <param name="userList"></param>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.WriteUserPhones(System.Collections.Generic.List{PhoneBook.Models.Models.UserPhones})">
+            <summary>
+            writes numbers to userPhones file
+            </summary>
+            <param name="userPhones"></param>
+        </member>
+        <member name="M:PhoneBook.Core.FileHandlers.IFileHandler.WritePhoneTypesVM(System.Collections.Generic.List{PhoneBook.Models.ViewModels.PhoneTypesVM})">
+            <summary>
+            writes new phone types to file
+            </summary>
+            <param name="vm"></param>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.GetUser(System.Int32,System.Int32)">
+            <summary>
+            Gets an user by id, from the specified file type
+            </summary>
+            <param name="id"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.GetUsersOrdered(System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Gets all users ordered by first name or lastname ,desc or asc, from the specified filetype
+            </summary>
+            <param name="firstnameOrder"></param>
+            <param name="ascOrder"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.PostUser(PhoneBook.Models.ViewModels.PhoneBookVM,System.Int32)">
+            <summary>
+            Saves data to specified filetype
+            </summary>
+            <param name="vm"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.PutUser(PhoneBook.Models.ViewModels.PhoneBookVM,System.Int32)">
+            <summary>
+            Updates user to specified filetype
+            </summary>
+            <param name="vm"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.DeleteUser(System.Int32,System.Int32)">
+            <summary>
+            Deletes an user from the specified filetype
+            </summary>
+            <param name="id"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.GetPhoneTypes(System.Int32)">
+            <summary>
+            Gets all phone types from specified filetype
+            </summary>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.AddPhoneNumber(PhoneBook.Models.ViewModels.PhoneBookVM,System.Int32)">
+            <summary>
+            Adds a new phone number to the specified filetype
+            </summary>
+            <param name="vm"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Interfaces.IPhoneBookRepository.AddPhoneTypesVM(PhoneBook.Models.ViewModels.PostPhoneTypesVM,System.Int32)">
+            <summary>
+            Adds a new phone type to specified filetype
+            </summary>
+            <param name="vm"></param>
+            <param name="fileType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PhoneBook.Core.Repositories.PhoneBookRepository.AddPhoneNumber(PhoneBook.Models.ViewModels.PhoneBookVM,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="user"></param>
+            <returns>User where phone was added</returns>
+        </member>
+        <member name="M:PhoneBook.Core.Repositories.PhoneBookRepository.DeleteUser(System.Int32,System.Int32)">
+            <summary>
+            Delete user with given id
+            </summary>
+            <param name="id"></param>
+            <returns>true if the user is deleted, false otherwise</returns>
+        </member>
+    </members>
+</doc>
